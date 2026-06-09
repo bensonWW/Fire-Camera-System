@@ -33,9 +33,27 @@ project(Fire-Camera-System C CXX ASM)
 # Initialise the Raspberry Pi Pico SDK
 pico_sdk_init()
 
-# Add executable. Default name is the project name, version 0.1
+# --- FreeRTOS 核心檔案配置 ---
+# 定義 FreeRTOS 原始碼路徑
+set(FREERTOS_KERNEL_PATH "${CMAKE_CURRENT_LIST_DIR}/FreeRTOS-Kernel")
 
-add_executable(Fire-Camera-System Fire-Camera-System.c )
+# 引入你的 FreeRTOS 原始碼檔案
+file(GLOB FREERTOS_SOURCES
+    "${FREERTOS_KERNEL_PATH}/*.c"
+    "${FREERTOS_KERNEL_PATH}/portable/GCC/ARM_CM0/*.c" # 適用於 Pico 的 Cortex-M0+ 移植層
+    "${FREERTOS_KERNEL_PATH}/portable/MemMang/heap_4.c" # 記憶體管理模組
+)
+
+# --- 建立執行檔與編譯路徑 ---
+# 將你搬過去的所有 .c 功能檔案全部加進編譯清單
+execute_process(COMMAND python ${CMAKE_CURRENT_LIST_DIR}/script/html_to_c.py)
+add_executable(Fire-Camera-System 
+    src/main.c 
+    src/fire_monitor.c 
+    src/network_task.c 
+    src/sound_listen.c
+    ${FREERTOS_SOURCES}
+)
 
 pico_set_program_name(Fire-Camera-System "Fire-Camera-System")
 pico_set_program_version(Fire-Camera-System "0.1")
@@ -44,14 +62,23 @@ pico_set_program_version(Fire-Camera-System "0.1")
 pico_enable_stdio_uart(Fire-Camera-System 0)
 pico_enable_stdio_usb(Fire-Camera-System 1)
 
-# Add the standard library to the build
+# --- 連結驅動函式庫 ---
+# 包含硬體所需的 GPIO 和 ADC 控制庫
 target_link_libraries(Fire-Camera-System
-        pico_stdlib)
+    pico_stdlib
+    hardware_gpio
+    hardware_adc
+)
 
-# Add the standard include files to the build
+# --- 標頭檔搜尋路徑 (Include Paths) ---
+# 告訴編譯器你的 include 資料夾以及 FreeRTOS 的標頭檔在哪裡
 target_include_directories(Fire-Camera-System PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/include
+    ${FREERTOS_KERNEL_PATH}/include
+    ${FREERTOS_KERNEL_PATH}/portable/GCC/ARM_CM0
 )
 
 pico_add_extra_outputs(Fire-Camera-System)
+
 
