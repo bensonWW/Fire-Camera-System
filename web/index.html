@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edge-FireCam 消防主控台</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>🚨 消防調度中心主控制台</h1>
+    <div class="subtitle" id="mqttStatus">正在連線至網路物聯網郵局...</div>
+
+    <div class="camera-container" id="camPanel">
+        <div class="status-badge" id="statusText">🟢 系統監控中 - 安全</div>
+        <div class="sensor-data">連線狀態: <span id="connectBadge" style="color: #ffcc00;">未連線</span></div>
+        <div class="sensor-data">通訊頻道: <span style="color: #00ffff;">ntut/cs/fireproject</span></div>
+        <hr style="border: 0; border-top: 0.5px solid #444; margin: 15px 0;">
+        <div class="sensor-data">🌡️ 環境溫度: <span id="tempVal">26.5</span> °C</div>
+        <div class="sensor-data">🎚️ 聲音狀態: <span id="soundStatus">正常</span></div>
+        
+        <div class="video-feed" id="videoBox">
+            🔒 數位隱私鎖定中 (無火災事件)
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button onclick="publishSignal('NORMAL')" style="background-color: #00cc66;">廣播「恢復正常」</button>
+        <button onclick="publishSignal('SOUND')" style="background-color: #ff9900;">廣播「偵測到聲音」</button>
+        <button onclick="publishSignal('FIRE')" style="background-color: #ff3333;">廣播「爆發火災」</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
