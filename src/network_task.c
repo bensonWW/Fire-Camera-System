@@ -10,6 +10,7 @@
 #define WIFI_PASSWORD "benson25" // 🎯 請替換成你的 Wi-Fi 密碼
 
 void network_task(void *pvParameters) {
+<<<<<<< HEAD
     printf("[Network] 網路任務已安全喚醒...\n");
     fflush(stdout);
     // ❌ 刪除或註解掉原本任務內部的 cyw43_arch_init() 與 cyw43_arch_enable_sta_mode()
@@ -24,18 +25,28 @@ void network_task(void *pvParameters) {
 
     printf("[Network] 🎉 Wi-Fi 連線成功！\n");
     
+<<<<<<< HEAD
     // 獲取並列印 IP 位址
+=======
+>>>>>>> 72fcdfb9494b6fb99650abbafe7736347b28c6dd
     struct netif *netif = &cyw43_state.netif[CYW43_ITF_STA];
     printf("[Network] =============================================\n");
     printf("[Network] 💡 Pico 2 W 當前 IP 位址: %s\n", ip4addr_ntoa(netif_ip4_addr(netif)));
     printf("[Network] =============================================\n");
 
+<<<<<<< HEAD
     // 啟動網頁伺服器
+=======
+>>>>>>> 72fcdfb9494b6fb99650abbafe7736347b28c6dd
     printf("[Network] 正在啟動 HTTP 網頁伺服器...\n");
     httpd_init();
     printf("[Network] 🚀 Web Server 已在 Port 80 監聽！\n");
 
     while (true) {
+<<<<<<< HEAD
+=======
+        // 定期睡眠，把 CPU 釋放給其他任務
+>>>>>>> 72fcdfb9494b6fb99650abbafe7736347b28c6dd
         vTaskDelay(pdMS_TO_TICKS(1000)); 
     }
 }
