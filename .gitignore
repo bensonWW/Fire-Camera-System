@@ -1,0 +1,6 @@
+build
+.vscode
+description
+# 外部依賴（請依 README 自行 clone，不納入版控）
+FreeRTOS-Kernel
+pico_dht
