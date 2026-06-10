@@ -42,7 +42,6 @@ include(pico_sdk_import.cmake)
 # 執行專案宣告與 Pico SDK 初始化
 project(Fire-Camera-System C CXX ASM)
 pico_sdk_init()
-
 # 掛載 FreeRTOS 子目錄
 add_subdirectory(FreeRTOS-Kernel)
 
@@ -58,13 +57,16 @@ add_executable(Fire-Camera-System
 target_include_directories(Fire-Camera-System PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/include
     ${CMAKE_CURRENT_LIST_DIR}/src
+    # 👇 下面這兩行是解決 arch/sys_arch.h 找不到的終極特效藥
+    "C:/Users/Benson/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_lwip/include"
+    "C:/Users/Benson/.pico-sdk/sdk/2.2.0/lib/lwip/contrib/ports/freertos/include"
 )
 
 # --- 4. 連結外部函式庫 ---
 target_link_libraries(Fire-Camera-System PRIVATE
     pico_stdlib
-    pico_cyw43_arch_lwip_sys_freertos
-    pico_lwip_http                 # 🎯【核心修正】：加入這行以支援 httpd_init 網頁伺服器
+    pico_cyw43_arch_lwip_threadsafe_background
+    pico_lwip_http
     freertos_kernel                  
     hardware_gpio
     hardware_adc

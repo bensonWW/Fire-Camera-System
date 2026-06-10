@@ -1,7 +1,7 @@
 import os
 
 # 定義路徑
-current_dir = os.path.dirname(os.path.abspath(__file__))
+current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 web_dir = os.path.join(current_dir, "web")
 output_h = os.path.join(current_dir, "include", "web_content.h")
 
